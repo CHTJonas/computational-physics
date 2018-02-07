@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
+#include <cmath>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_sf_pow_int.h>
 #include <gsl/gsl_sf_trig.h>
@@ -19,12 +20,11 @@ double fRand(double fMin, double fMax)
 	return fMin + f * (fMax - fMin);
 }
 
-int main() {
-	srand(time(NULL));
+void MonteCarlo(int N) {
 	double s = M_PI_4 / 2.0;
 	double V = gsl_sf_pow_int(s, 8);
-	int N = 100000;
 	double sum = 0.0;
+	double sumSquares = 0.0;
 	for (int i = 0; i < N; i++) {
 		double randX_0 = fRand(0.0, s);
 		double randX_1 = fRand(0.0, s);
@@ -34,11 +34,31 @@ int main() {
 		double randX_5 = fRand(0.0, s);
 		double randX_6 = fRand(0.0, s);
 		double randX_7 = fRand(0.0, s);
-		sum += f(randX_0, randX_1, randX_2, randX_3, randX_4, randX_5, randX_6, randX_7);
+		double result = f(randX_0, randX_1, randX_2, randX_3, randX_4, randX_5, randX_6, randX_7);
+		sum += result;
+		sumSquares += gsl_sf_pow_int(result, 2);
 	}
 	double result = sum / (double)N;
 	result = V * result;
+	double error = sumSquares / (double)N;
+	error = error - gsl_sf_pow_int(result, 2);
+	error = error / (double)N;
+	error = sqrt(error);
+	error = V * error;
 	result = gsl_sf_pow_int(10.0, 6) * result;
-	cout << result << "\n";
+	error = gsl_sf_pow_int(10.0, 6) * error;
+	cout << N << " " << result << " " << error << "\n";
+}
+
+int main() {
+	// Seed the PRNG with the current time
+	srand(time(NULL));
+	// Run Monte-Carlo simulations with i number of samples
+	for (int i=1; i<1000; i++) {
+		// Run each simulation 10 times to estimate error
+		for (int n=0; n<10; n++) {
+			MonteCarlo(i);
+		}
+	}
 	return 0;
 }
