@@ -3,10 +3,12 @@
 #include <ctime>
 #include <cmath>
 #include <gsl/gsl_math.h>
+#include <gsl/gsl_rng.h>
 #include <gsl/gsl_sf_pow_int.h>
 #include <gsl/gsl_sf_trig.h>
 
 using namespace std;
+gsl_rng* rng = gsl_rng_alloc(gsl_rng_default);
 
 double f(double x_0, double x_1, double x_2, double x_3, double x_4, double x_5, double x_6, double x_7) {
 	double total = x_0 + x_1 + x_2 + x_3 + x_4 + x_5 + x_6 + x_7;
@@ -16,7 +18,7 @@ double f(double x_0, double x_1, double x_2, double x_3, double x_4, double x_5,
 
 double fRand(double fMin, double fMax)
 {
-	double f = (double)rand() / RAND_MAX;
+	double f = gsl_rng_uniform(rng);
 	return fMin + f * (fMax - fMin);
 }
 
@@ -52,7 +54,7 @@ void MonteCarlo(int N) {
 
 int main() {
 	// Seed the PRNG with the current time
-	srand(time(NULL));
+	gsl_rng_set(rng, time(NULL));
 	// Run Monte-Carlo simulations with i number of samples
 	for (int i=1; i<1000; i++) {
 		// Run each simulation 10 times to estimate error
