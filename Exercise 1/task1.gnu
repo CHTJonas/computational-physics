@@ -27,3 +27,13 @@ set title 'The reciprocal of the error squared as a function of Monte-Carlo samp
 f='task1.dat'
 set border 11
 plot f using 1:3**-2 with points pointtype 28 linecolor rgb "red" notitle
+
+reset
+set term png size 1200,900 font "LiberationSans-Regular" 22
+set output 'task1-error-bars.png'
+set xlabel 'Number of Monte-Carlo samples'
+set ylabel 'Result'
+set title 'Result of integral and error as a function of Monte-Carlo sample number'
+f='task1.dat'
+set border 11
+plot f using 1:2:3 with yerrorbars notitle
