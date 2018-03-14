@@ -22,7 +22,7 @@ double fRand(double fMin, double fMax)
 	return fMin + f * (fMax - fMin);
 }
 
-void MonteCarlo(int N) {
+void MonteCarlo(int N, double& result, double& error) {
 	double s = M_PI_4 / 2.0;
 	double V = gsl_sf_pow_int(s, 8);
 	double sum = 0.0;
@@ -40,27 +40,35 @@ void MonteCarlo(int N) {
 		sum += result;
 		sumSquares += gsl_sf_pow_int(result, 2);
 	}
-	double result = sum / (double)N;
+	result = sum / (double)N;
 	result = V * result;
-	double error = sumSquares / (double)N;
+	error = sumSquares / (double)N;
 	error = error - gsl_sf_pow_int(result, 2);
 	error = error / (double)N;
 	error = sqrt(error);
 	error = V * error;
 	result = gsl_sf_pow_int(10.0, 6) * result;
 	error = gsl_sf_pow_int(10.0, 6) * error;
-	cout << N << " " << result << " " << error << "\n";
 }
 
 int main() {
 	// Seed the PRNG with the current time
 	gsl_rng_set(rng, time(NULL));
-	// Run Monte-Carlo simulations with i number of samples
-	for (int i=1; i<1000; i++) {
-		// Run each simulation 10 times to estimate error
-		for (int n=0; n<10; n++) {
-			MonteCarlo(i);
+	// Run a Monte-Carlo simulations with i number of samples
+	for (int i=1; i<=800; i=i+10) {
+		double result = 0;
+		double error = 0;
+		// Run each simulation 100 times and estimate error
+		for (int n=0; n<100; n++) {
+			double currentResult;
+			double currentError;
+			MonteCarlo(i, currentResult, currentError);
+			result += currentResult;
+			error += gsl_sf_pow_int(currentError, 2) / (double)i;
 		}
+		result = result / 100.0;
+		error = sqrt(error) / 100.0;
+		cout << i << " " << result << " " << error << "\n";
 	}
 	return 0;
 }
