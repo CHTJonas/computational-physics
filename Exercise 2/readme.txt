@@ -13,3 +13,11 @@ In core task 2 I first added some damping wiht values of q = 1, 5, 10 and check 
 I then added some driving force by setting F = 0.5, 1.2, 1.44, 1.465 with a constant q = 0.5.
 From measuring directly of the graphs, I found that the period remained approximately constant.
 All plots have a suffix indicating which value of q or F they relate to.
+
+--
+
+In supplementary task 2 I used hard-coded values of F = 1.2, 1.20001 and plotted these in gnuplot.
+
+I observed that the solutions were very similar for the first ~42 seconds.
+However after this they diverged, and invert over the top of the pendulum.
+However after about 95 seconds they appear to restore phase once again.

@@ -1,0 +1,57 @@
+// GSL solution to the ODE for a driven pendulum
+// d^2 theta/dt^2 = - (g/l) * sin(theta) - q * d theta/dt + F * sin(omega_D * t)
+#include <iostream>
+#include <cmath>
+#include <gsl/gsl_math.h>
+#include <gsl/gsl_errno.h>
+#include <gsl/gsl_odeiv.h>
+
+using namespace std;
+
+// Evaluate the derivatives
+// We work in the transformed variables
+// y[0] = theta
+// y[1] = d(theta)/dt
+int calc_derivatives(double t, const double y[], double dydx[], void *params) {
+	// Extract the parameters
+	// params is a pointer to an array of doubles
+	double q = *((double *)(params) + 0);
+	double F = *((double *)(params) + 1);
+	// g=l
+	double omega_D = 2.0 / 3.0;
+	dydx[0] = y[1];
+	dydx[1] = - sin(y[0]) - q * y[1] + F * sin(omega_D * t);
+	return GSL_SUCCESS;
+}
+
+int main() {
+	// Initial conditions:
+	double params[2] = {0.5, 1.20001};
+	const int n_equations = 2;
+	const double initialAmplitude = 1.85;
+	double y[n_equations] = {initialAmplitude, 0.0};
+	double t = 0.0;
+	// Create a stepping function
+	gsl_odeiv_step *gsl_step = gsl_odeiv_step_alloc(gsl_odeiv_step_rk4, n_equations);
+	// Adaptive step control: let's use fixed steps here:
+	gsl_odeiv_control *gsl_control = NULL;
+	// Create an evolution function:
+	gsl_odeiv_evolve *gsl_evolve = gsl_odeiv_evolve_alloc(n_equations);
+	// Set up the system needed by GSL
+	// The 4th arg is a pointer to any parameters needed by the evaluator
+	// The 2nd arg points to the jacobian function if needed (it's not needed here)
+	gsl_odeiv_system gsl_sys = {calc_derivatives, NULL, n_equations, params};
+	double t_max = 100;
+	double h = 1e-3;
+
+	// Main loop: advance solution until t_max reached.
+	while (t < t_max) {
+		cout << t << " " << y[0] << " " << y[1] << "\n";
+		int status = gsl_odeiv_evolve_apply(gsl_evolve, gsl_control, gsl_step, &gsl_sys, &t, t_max, &h, y);
+		if (status != GSL_SUCCESS) break;
+	}
+	// Tidy up the GSL objects for neatness:
+	gsl_odeiv_evolve_free(gsl_evolve);
+	gsl_odeiv_step_free(gsl_step);
+	return 0;
+}
