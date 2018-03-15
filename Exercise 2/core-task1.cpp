@@ -19,7 +19,7 @@ int calc_derivatives(double t, const double y[], double dydx[], void *params) {
 	double q = *((double *)(params) + 0);
 	double F = *((double *)(params) + 1);
 	// g=l
-	double omega_D = 2/3;
+	double omega_D = 2.0 / 3.0;
 	dydx[0] = y[1];
 	dydx[1] = - sin(y[0]) - q * y[1] + F * sin(omega_D * t);
 	return GSL_SUCCESS;
