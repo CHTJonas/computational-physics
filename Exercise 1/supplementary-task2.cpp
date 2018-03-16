@@ -42,18 +42,16 @@ double integrate (double u, double (*f)(double, void*)) {
 
 void optics(int steps, double wavelength, double slitWidth, double seperationDistance) {
 	double scalingFactor = sqrt(2.0 / wavelength / seperationDistance);
-	double x = -slitWidth / 2.0;
-	double w1 = 0.0;
-	double w2 = slitWidth * scalingFactor;
-	double step = w2 / (double)steps;
-	while (x <= slitWidth / 2.0) {
+	double x = -3.0 * slitWidth;
+	double step = 6.0 * slitWidth / (double)steps;
+	while (x <= 3.0 * slitWidth) {
+		double w1 = (-slitWidth / 2.0 - x) * scalingFactor;
+		double w2 = (slitWidth / 2.0 - x) * scalingFactor;
 		double real = integrate(w2, &C) - integrate(w1, &C);
 		double imag = integrate(w2, &S) - integrate(w1, &S);
 		double result = sqrt( gsl_sf_pow_int(real, 2) + gsl_sf_pow_int(imag, 2) );
 		cout << x << " " << result << "\n";
-		w1 -= step;
-		w2 -= step;
-		x += slitWidth / (double)steps;
+		x += step;
 	}
 }
 
