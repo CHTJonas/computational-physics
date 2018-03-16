@@ -57,15 +57,15 @@ void optics(int steps, double wavelength, double slitWidth, double seperationDis
 	}
 }
 
-int main () {
+int main (int argc, char* argv[]) {
+	if (argc != 2) {
+		cerr << "Distance to screen not given, or too many arguments" << "\n";
+		return 1;
+	}
 	int steps = 1000;
 	double wavelength = 0.01;
 	double slitWidth = 0.1;
-	double seperationDistance = 0.3;
-	optics(steps, wavelength, slitWidth, seperationDistance);
-	seperationDistance = 0.5;
-	optics(steps, wavelength, slitWidth, seperationDistance);
-	seperationDistance = 1.0;
+	double seperationDistance = atof(argv[1]);
 	optics(steps, wavelength, slitWidth, seperationDistance);
 	return 0;
 }
