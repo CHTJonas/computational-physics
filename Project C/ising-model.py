@@ -1,6 +1,11 @@
+import matplotlib
+matplotlib.use('Agg')
 import math
 import numpy
+import matplotlib.pyplot
 
+# Total number of Monte Carlo steps
+steps = 100
 # The number of spins in the system
 M = 625
 N = int(math.sqrt(M))
@@ -27,12 +32,12 @@ def sweep():
   for (x,y), value in numpy.ndenumerate(a):
     # Flip the spin and calculate the energy difference
     E1 = energy()
-    print("Initial energy: ", E1)
+#    print("Initial energy: ", E1)
     a[x,y] = -a[x,y]
     E2 = energy()
-    print("Final energy: ", E2)
+#    print("Final energy: ", E2)
     Edelta = E1 - E2
-    print("Energy delta: ", Edelta)
+#    print("Energy delta: ", Edelta)
 
     if Edelta < 0:
       # Spin is already flipped
@@ -50,6 +55,8 @@ def sweep():
 def energy():
   E = 0
   for (x,y), value in numpy.ndenumerate(a):
+    # Periodic boundary conditions
+    # Imagine the lattice on a torus
     E -= J * ( a[x-1,y]*a[x,y] + a[x,y-1]*a[x,y] + a[x,(y+1)%N]*a[x,y] + a[(x+1)%N,y]*a[x,y] )
     E -= mu * H * a[x,y]
   return E;
@@ -58,6 +65,11 @@ def prob(deltaE):
   p = numpy.exp( -deltaE / kB / T)
   return p;
 
-sweep()
-#for (x,y), value in numpy.ndenumerate(a):
-#  print(a[x])
+energies = numpy.empty(shape=(steps))
+
+for n in range(steps):
+  energies[n] = energy()
+  sweep()
+matplotlib.pyplot.plot(energies,label="Energy")
+matplotlib.pyplot.legend()
+matplotlib.pyplot.savefig("ising-model.png", dpi=150, bbox_inches="tight")
