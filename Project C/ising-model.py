@@ -11,15 +11,15 @@ steps = 100
 # The dimensions of the NxN lattice
 N = 25
 # Array of random spins
-a = numpy.empty(shape=(N,N))
-for (x,y), value in numpy.ndenumerate(a):
+spins = numpy.empty(shape=(N,N))
+for (x,y), value in numpy.ndenumerate(spins):
   rand = numpy.random.random()
   if rand > 0.5:
-    a[x,y] = 1
+    spins[x,y] = 1
   else:
-    a[x,y] = -1
 # The exchange energy
 J = 1.0
+    spins[x,y] = -1
 # The magnetic moment
 mu = 2.0;
 # The applied magnetic field
@@ -29,12 +29,12 @@ kB = 1.38064852 * 10**(-23)
 # Temperature (K)
 T = 273
 
-def sweep():
-  for (x,y), value in numpy.ndenumerate(a):
+def sweep( temp ):
+  for (x,y), value in numpy.ndenumerate(spins):
     # Flip the spin and calculate the energy difference
     E1 = energy()
 #    print("Initial energy: ", E1)
-    a[x,y] = -a[x,y]
+    spins[x,y] = -spins[x,y]
     E2 = energy()
 #    print("Final energy: ", E2)
     Edelta = E1 - E2
@@ -42,24 +42,24 @@ def sweep():
 
     if Edelta < 0:
       # Spin is already flipped
-      a[x,y] = a[x,y]
+      spins[x,y] = spins[x,y]
     else:
       p = numpy.random.random()
       if prob(Edelta) > p:
         # Spin is already flipped
-        a[x,y] = a[x,y]
+        spins[x,y] = spins[x,y]
       else:
         # Flip the spin back
-        a[x,y] = -a[x,y]
+        spins[x,y] = -spins[x,y]
   return;
 
 def energy():
   E = 0
-  for (x,y), value in numpy.ndenumerate(a):
+  for (x,y), value in numpy.ndenumerate(spins):
     # Periodic boundary conditions
     # Imagine the lattice on a torus
-    E -= J * ( a[x-1,y]*a[x,y] + a[x,y-1]*a[x,y] + a[x,(y+1)%N]*a[x,y] + a[(x+1)%N,y]*a[x,y] )
-    E -= mu * H * a[x,y]
+    E -= J * ( spins[x-1,y]*spins[x,y] + spins[x,y-1]*spins[x,y] + spins[x,(y+1)%N]*spins[x,y] + spins[(x+1)%N,y]*spins[x,y] )
+    E -= mu * H * spins[x,y]
   return E;
 
 def prob(deltaE):
