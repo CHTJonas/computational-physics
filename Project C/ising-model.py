@@ -5,6 +5,7 @@ matplotlib.use('Agg')
 import math
 import numpy
 import matplotlib.pyplot
+import sys
 
 # Total number of Monte Carlo steps
 steps = 100
@@ -45,7 +46,7 @@ def sweep( temp ):
       spins[x,y] = spins[x,y]
     else:
       p = numpy.random.random()
-      if prob(Edelta) > p:
+      if prob(Edelta, temp) > p:
         # Spin is already flipped
         spins[x,y] = spins[x,y]
       else:
@@ -62,15 +63,23 @@ def energy():
     E -= mu * H * spins[x,y]
   return E;
 
-def prob(deltaE):
-  p = numpy.exp( -deltaE / kB / T)
+def magnetisation():
+  M = 0
+  for (x,y), value in numpy.ndenumerate(spins):
+    M += spins[x,y]
+  M = M / N
+  return M;
+
+def prob( deltaE, temp ):
+  p = numpy.exp( -deltaE / kB / temp )
   return p;
 
-energies = numpy.empty(shape=(steps))
+magnetisations = numpy.empty(shape=(steps))
 
+temp = sys.argv[1]
 for n in range(steps):
-  energies[n] = energy()
-  sweep()
-matplotlib.pyplot.plot(energies,label="Energy")
+  magnetisations[n] = energy()
+  sweep(float(temp))
+matplotlib.pyplot.plot(magnetisations,label="Temp: " + temp)
 matplotlib.pyplot.legend()
-matplotlib.pyplot.savefig("ising-model.png", dpi=150, bbox_inches="tight")
+matplotlib.pyplot.savefig("ising-model-" + temp + ".png", dpi=150, bbox_inches="tight")
