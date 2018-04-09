@@ -18,28 +18,24 @@ for (x,y), value in numpy.ndenumerate(spins):
   if rand > 0.5:
     spins[x,y] = 1
   else:
-# The exchange energy
-J = 1.0
     spins[x,y] = -1
 # The magnetic moment
 mu = 2.0;
 # The applied magnetic field
 H = 0.0;
-# Boltzmann Constant (J/K)
-kB = 1.38064852 * 10**(-23)
-# Temperature (K)
-T = 273
+# J is the exchange energy
+J = 1.0
+# kB is the Boltzmann constant
+kB = 1.0
+# So we measure temperature in units of J/kB
 
 def sweep( temp ):
   for (x,y), value in numpy.ndenumerate(spins):
     # Flip the spin and calculate the energy difference
     E1 = energy()
-#    print("Initial energy: ", E1)
     spins[x,y] = -spins[x,y]
     E2 = energy()
-#    print("Final energy: ", E2)
     Edelta = E1 - E2
-#    print("Energy delta: ", Edelta)
 
     if Edelta < 0:
       # Spin is already flipped
