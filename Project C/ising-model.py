@@ -74,8 +74,8 @@ magnetisations = numpy.empty(shape=(steps))
 
 temp = sys.argv[1]
 for n in range(steps):
-  magnetisations[n] = energy()
+  magnetisations[n] = magnetisation()
   sweep(float(temp))
 matplotlib.pyplot.plot(magnetisations,label="Temp: " + temp)
-matplotlib.pyplot.legend()
+matplotlib.pyplot.legend(loc='lower right')
 matplotlib.pyplot.savefig("ising-model-" + temp + ".png", dpi=150, bbox_inches="tight")
