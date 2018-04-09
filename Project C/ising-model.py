@@ -60,10 +60,10 @@ def energy():
   return E;
 
 def magnetisation():
-  M = 0
+  M = 0.0
   for (x,y), value in numpy.ndenumerate(spins):
-    M += spins[x,y]
-  M = M / N
+    M += float(spins[x,y])
+  M = float(M) / float(N)
   return M;
 
 def prob( deltaE, temp ):
