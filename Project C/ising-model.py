@@ -20,7 +20,7 @@ for (x,y), value in numpy.ndenumerate(spins):
   else:
     spins[x,y] = -1
 # The magnetic moment
-mu = 2.0;
+mu = 1.0;
 # The applied magnetic field
 H = 0.0;
 # J is the exchange energy
