@@ -8,9 +8,9 @@ import matplotlib.pyplot
 import sys
 
 # Total number of Monte Carlo steps
-steps = 50
+steps = 100
 # The dimensions of the NxN lattice
-N = 8
+N = 15
 # Array of random spins
 spins = numpy.empty(shape=(N,N))
 for (x,y), value in numpy.ndenumerate(spins):
