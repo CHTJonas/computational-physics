@@ -63,15 +63,15 @@ def magnetisation():
   return M;
 
 def prob( deltaE, temp ):
-  p = numpy.exp( -deltaE / kB / temp )
+  p = numpy.exp( -float(deltaE) / float(kB) / float(temp) )
   return p;
 
 magnetisations = numpy.empty(shape=(steps))
 
 temp = sys.argv[1]
 for n in range(steps):
-  magnetisations[n] = magnetisation()
+  magnetisations[n] = abs(magnetisation())
   sweep(float(temp))
 matplotlib.pyplot.plot(magnetisations,label="Temp: " + temp)
-matplotlib.pyplot.legend(loc='lower right')
+matplotlib.pyplot.legend(loc='upper right')
 matplotlib.pyplot.savefig("ising-model-" + temp + ".png", dpi=150, bbox_inches="tight")
