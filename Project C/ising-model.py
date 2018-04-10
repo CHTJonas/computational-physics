@@ -11,14 +11,10 @@ import sys
 steps = 100
 # The dimensions of the NxN lattice
 N = 15
-# Array of random spins
+# Array of spin-up atoms
 spins = numpy.empty(shape=(N,N))
 for (x,y), value in numpy.ndenumerate(spins):
-  rand = numpy.random.random()
-  if rand > 0.5:
-    spins[x,y] = 1
-  else:
-    spins[x,y] = -1
+  spins[x,y] = 1.0
 # The magnetic moment
 mu = 1.0;
 # The applied magnetic field
