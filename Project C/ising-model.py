@@ -16,9 +16,9 @@ spins = np.empty(shape=(N,N))
 for (x,y), value in np.ndenumerate(spins):
   spins[x,y] = 1.0
 # The magnetic moment
-mu = 1.0;
+mu = 1.0
 # The applied magnetic field
-H = 0.0;
+H = 0.0
 # J is the exchange energy
 J = 1.0
 # kB is the Boltzmann constant
@@ -42,7 +42,7 @@ def sweep( temp ):
         # Spin is already flipped
         spins[x,y] = spins[x,y]
       else:
-        # Flip the spin back
+        # Flip the spin back so overall we do nothing
         spins[x,y] = -spins[x,y]
   return;
 
