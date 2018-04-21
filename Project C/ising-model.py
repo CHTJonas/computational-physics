@@ -47,12 +47,12 @@ def sweep( temp ):
   return;
 
 def energy():
-  E = 0
+  E = 0.0
   for (x,y), value in np.ndenumerate(spins):
     # Periodic boundary conditions
     # Imagine the lattice on a torus
-    E -= J * ( spins[x-1,y]*spins[x,y] + spins[x,y-1]*spins[x,y] + spins[x,(y+1)%N]*spins[x,y] + spins[(x+1)%N,y]*spins[x,y] )
-    E -= mu * H * spins[x,y]
+    E -= float(J) * float( spins[x-1,y]*spins[x,y] + spins[x,y-1]*spins[x,y] + spins[x,(y+1)%N]*spins[x,y] + spins[(x+1)%N,y]*spins[x,y] )
+    E -= float(mu) * float(H) * float(spins[x,y])
   return E;
 
 def magnetisation():
