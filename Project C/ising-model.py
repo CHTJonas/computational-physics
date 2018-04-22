@@ -75,7 +75,15 @@ for n in range(steps):
   magnetisations[n] = abs(magnetisation())
   sweep(float(temp))
 
-matplotlib.pyplot.plot(energies, label="Energy")
-matplotlib.pyplot.plot(magnetisations, label="Mean Magnetisation")
-matplotlib.pyplot.legend(loc='upper right')
-matplotlib.pyplot.savefig("ising-model-" + temp + ".png", dpi=150, bbox_inches="tight")
+f, axarr = plt.subplots(2, sharex=True)
+axarr[0].plot(energies, color="red")
+axarr[0].set(xlabel="Monte Carlo Step", ylabel="Energy")
+axarr[1].plot(magnetisations, color="blue")
+axarr[1].set(xlabel="Monte Carlo Step", ylabel="Mean Magnetisation")
+# Bring subplots close to each other.
+f.subplots_adjust(hspace=0)
+# Hide x labels and tick labels for all but bottom plot.
+for ax in axarr:
+    ax.label_outer()
+f.tight_layout()
+plt.savefig("ising-model-" + temp + ".png", dpi=150, bbox_inches="tight")
