@@ -10,7 +10,7 @@ import sys
 # Total number of Monte Carlo steps
 steps = 100
 # The dimensions of the NxN lattice
-N = 15
+N = int(sys.argv[2])
 # Array of spin-up atoms
 spins = np.empty(shape=(N,N))
 for (x,y), value in np.ndenumerate(spins):
@@ -18,7 +18,7 @@ for (x,y), value in np.ndenumerate(spins):
 # The magnetic moment
 mu = 1.0
 # The applied magnetic field
-H = 0.0
+H = float(sys.argv[3])
 # J is the exchange energy
 J = 1.0
 # kB is the Boltzmann constant
@@ -86,4 +86,4 @@ f.subplots_adjust(hspace=0)
 for ax in axarr:
     ax.label_outer()
 f.tight_layout()
-plt.savefig("ising-model-" + temp + ".png", dpi=150, bbox_inches="tight")
+plt.savefig("ising-temp" + temp + "-N" + str(N) + "-H" + str(H) + ".png", dpi=150, bbox_inches="tight")
