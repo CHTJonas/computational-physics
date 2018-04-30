@@ -68,12 +68,17 @@ def prob( deltaE, temp ):
 
 energies = np.empty(shape=(steps))
 magnetisations = np.empty(shape=(steps))
+calcE = 0.0
 
 temp = sys.argv[1]
 for n in range(steps):
   energies[n] = energy()
+  if n>=20:
+    calcE += energies[n]
   magnetisations[n] = abs(magnetisation())
   sweep(float(temp))
+calcE = calcE / (steps - 20)
+print(str(H) + "," + str(calcE))
 
 f, axarr = plt.subplots(2, sharex=True)
 axarr[0].plot(energies, color="red")
